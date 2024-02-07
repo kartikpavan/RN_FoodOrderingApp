@@ -6,7 +6,6 @@ import { FlatList, View } from "react-native";
 export default function FoodMenu() {
   return (
     <View>
-      <Stack.Screen options={{ title: "Menu" }} />
       <FlatList
         data={products}
         renderItem={(data) => <ProductListItem product={data.item} />}

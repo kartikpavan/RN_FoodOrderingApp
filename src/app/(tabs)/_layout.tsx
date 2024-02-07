@@ -1,10 +1,8 @@
 import React from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { Link, Tabs } from "expo-router";
-import { Pressable } from "react-native";
+import { Tabs } from "expo-router";
 import { useColorScheme } from "@/src/components/useColorScheme.web";
 import { useClientOnlyValue } from "@/src/components/useClientOnlyValue.web";
-import Colors from "@/src/constants/Colors";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -15,12 +13,10 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ? "light" : "dark"].tint,
+        tabBarActiveTintColor: "tomato",
         headerShown: useClientOnlyValue(false, true),
       }}>
       {/* Hiding the default index.tsx file */}
@@ -30,23 +26,9 @@ export default function TabLayout() {
         name="menu"
         options={{
           title: "Menu",
-          headerShown: false,
+          headerShown: false, // we are rendering multiple stacks on top of each other
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="pizza-slice" color={color} />
-          ),
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome5
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ? "light" : "dark"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
           ),
         }}
       />
@@ -55,8 +37,7 @@ export default function TabLayout() {
         name="orders"
         options={{
           title: "Orders",
-          headerShown: false,
-
+          headerShown: false, // we are rendering multiple stacks on top of each other
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
       />
