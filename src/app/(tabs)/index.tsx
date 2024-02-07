@@ -1,23 +1,12 @@
-import { Text, View } from "@/src/components/Themed";
-import { StyleSheet } from "react-native";
+import products from "@/assets/data/products";
+import { ProductListItem } from "@/src/components/ProductListItem";
+import { View } from "react-native";
 
-export default function TabOneScreen() {
-  return <View style={styles.container}></View>;
+export default function FoodMenu() {
+  return (
+    <View>
+      <ProductListItem product={products[0]} />
+      <ProductListItem product={products[1]} />
+    </View>
+  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
