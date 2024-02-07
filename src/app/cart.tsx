@@ -14,7 +14,7 @@ const CartScreen = () => {
         <FlatList
           data={items}
           renderItem={(data) => <CartListItem cartItem={data.item} />}
-          keyExtractor={(item) => item.product_id.toString()}
+          keyExtractor={(item) => item.id}
           contentContainerStyle={{ padding: 10, gap: 10 }}
         />
       )}
