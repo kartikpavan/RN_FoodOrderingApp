@@ -1,5 +1,5 @@
 import React from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Link, Tabs } from "expo-router";
 import { Pressable } from "react-native";
 import { useColorScheme } from "@/src/components/useColorScheme.web";
@@ -8,10 +8,10 @@ import Colors from "@/src/constants/Colors";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
+  name: React.ComponentProps<typeof FontAwesome5>["name"];
   color: string;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome5 size={20} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -20,24 +20,28 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
+        tabBarActiveTintColor: Colors[colorScheme ? "light" : "dark"].tint,
         headerShown: useClientOnlyValue(false, true),
       }}>
+      {/* Hiding the default index.tsx file */}
+      <Tabs.Screen name="index" options={{ href: null }} />
+      {/* Menu Tab */}
       <Tabs.Screen
-        name="index"
+        name="menu"
         options={{
-          title: "Tab One",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Menu",
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="pizza-slice" color={color} />
+          ),
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
                 {({ pressed }) => (
-                  <FontAwesome
+                  <FontAwesome5
                     name="info-circle"
                     size={25}
-                    color={Colors[colorScheme ?? "light"].text}
+                    color={Colors[colorScheme ? "light" : "dark"].text}
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                   />
                 )}
@@ -46,11 +50,14 @@ export default function TabLayout() {
           ),
         }}
       />
+      {/* Orders Tab */}
       <Tabs.Screen
-        name="two"
+        name="orders"
         options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Orders",
+          headerShown: false,
+
+          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
       />
     </Tabs>
