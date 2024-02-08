@@ -68,6 +68,7 @@ const CreateProduct = () => {
   };
 
   const onDelete = () => {
+    // TODO: Delete Product from DB
     console.warn("Delete start");
   };
 
@@ -91,7 +92,7 @@ const CreateProduct = () => {
         alt="Pizza Image"
         style={styles.image}
       />
-      <Text style={styles.textBtn} onPress={pickImage}>
+      <Text style={styles.imageSelectBtn} onPress={pickImage}>
         Select Image
       </Text>
       <Text style={styles.label}>Name</Text>
@@ -136,9 +137,10 @@ const styles = StyleSheet.create({
   image: {
     width: "50%",
     aspectRatio: 1,
+    marginBottom: 10,
     alignSelf: "center",
   },
-  textBtn: {
+  imageSelectBtn: {
     alignSelf: "center",
     fontWeight: "bold",
     fontSize: 18,

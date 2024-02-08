@@ -5,11 +5,12 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Link, Stack } from "expo-router";
 import { FlatList, Pressable, View, useColorScheme } from "react-native";
 
+//? Admin Menu Screen
 export default function FoodMenu() {
   const colorScheme = useColorScheme();
-
   return (
     <View>
+      {/* Stack Info is added here to set the title or else add inside _layout.tsx */}
       <Stack.Screen
         options={{
           title: "Menu",
