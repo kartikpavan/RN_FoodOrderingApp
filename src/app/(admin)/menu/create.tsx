@@ -1,9 +1,10 @@
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
 import { createProductValdation } from "@/src/validator";
 import * as ImagePicker from "expo-image-picker";
+import { Stack, useLocalSearchParams } from "expo-router";
 
 export const defaultPizzaImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
@@ -13,6 +14,9 @@ const CreateProduct = () => {
   const [price, setPrice] = useState<string>("");
   const [image, setImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>("");
+
+  const { id } = useLocalSearchParams();
+  const isUpdating = Boolean(id);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -30,6 +34,14 @@ const CreateProduct = () => {
     }
   };
 
+  const onSubmit = async () => {
+    if (isUpdating) {
+      onUpdate();
+    } else {
+      onCreate();
+    }
+  };
+
   const onCreate = () => {
     // Input Validation
     const { success, errMessage } = createProductValdation(name, price);
@@ -37,15 +49,43 @@ const CreateProduct = () => {
       setError(errMessage);
       return;
     }
-    // Save Values to Db and reset State
+    //TODO: Save Values to Db and reset State
     console.log(`${name} : ${price}`);
     // Reset State value
     setName("");
     setPrice("");
   };
 
+  const onUpdate = () => {
+    const { success, errMessage } = createProductValdation(name, price);
+    if (success === false) {
+      setError(errMessage);
+      return;
+    }
+    //TODO: Update Values to Db and reset State
+    setName("");
+    setPrice("");
+  };
+
+  const onDelete = () => {
+    console.warn("Delete start");
+  };
+
+  const confirmDelete = () => {
+    Alert.alert("Confirm", "Are you sure you want to delete this product ?", [
+      {
+        text: "Cancel",
+        style: "default",
+      },
+      { text: "OK", style: "destructive", onPress: onDelete },
+    ]);
+  };
+
   return (
     <View style={styles.container}>
+      <Stack.Screen
+        options={{ title: isUpdating ? "Update Product" : "Create Product" }}
+      />
       <Image
         source={{ uri: image || defaultPizzaImage }}
         alt="Pizza Image"
@@ -71,11 +111,16 @@ const CreateProduct = () => {
       />
       {error && <Text style={{ color: "tomato" }}>{error}</Text>}
       <Button
-        text="Create Product"
+        text={`${isUpdating ? "Update" : "Create"} Product`}
         color={Colors.light.tint}
-        onPress={onCreate}
+        onPress={onSubmit}
         style={{ backgroundColor: "yellow" }}
       />
+      {isUpdating && (
+        <Text onPress={confirmDelete} style={styles.deleteBtn}>
+          Delete Product
+        </Text>
+      )}
     </View>
   );
 };
@@ -113,5 +158,12 @@ const styles = StyleSheet.create({
     marginTop: 5,
     borderRadius: 5,
     marginBottom: 20,
+  },
+  deleteBtn: {
+    alignSelf: "center",
+    fontWeight: "bold",
+    color: "red",
+    marginTop: 10,
+    fontSize: 16,
   },
 });
