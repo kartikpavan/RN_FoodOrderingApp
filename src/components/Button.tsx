@@ -4,12 +4,16 @@ import { forwardRef } from "react";
 
 type ButtonProps = {
   text: string;
+  color: string;
 } & React.ComponentPropsWithoutRef<typeof Pressable>;
 
 const Button = forwardRef<View | null, ButtonProps>(
-  ({ text, ...pressableProps }, ref) => {
+  ({ text, color, ...pressableProps }, ref) => {
     return (
-      <Pressable ref={ref} {...pressableProps} style={styles.container}>
+      <Pressable
+        ref={ref}
+        {...pressableProps}
+        style={{ ...styles.container, backgroundColor: color }}>
         <Text style={styles.text}>{text}</Text>
       </Pressable>
     );
@@ -18,7 +22,6 @@ const Button = forwardRef<View | null, ButtonProps>(
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "tomato",
     padding: 15,
     alignItems: "center",
     borderRadius: 50,

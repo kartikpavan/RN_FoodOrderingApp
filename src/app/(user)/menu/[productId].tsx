@@ -56,7 +56,7 @@ const SingleProductScreen = () => {
         })}
       </View>
       <Text style={styles.price}>Price: ₹ {product.price}</Text>
-      <Button text="Add To Cart" onPress={addToCart} />
+      <Button text="Add To Cart" color="tomato" onPress={addToCart} />
     </View>
   );
 };

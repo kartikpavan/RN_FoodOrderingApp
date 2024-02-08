@@ -45,7 +45,7 @@ const CartScreen = () => {
         </View>
       </View>
       <View style={{ marginTop: "auto" }}>
-        <Button text="Checkout" />
+        <Button text="Checkout" color="tomato" />
       </View>
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
