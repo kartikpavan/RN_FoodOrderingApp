@@ -53,7 +53,7 @@ export const CartContextProvider = ({ children }: PropsWithChildren) => {
 
   // Update Quantity of item
   const updateQuantity = (productId: string, amount: 1 | -1) => {
-    // get the prdocut whose qty is to be updated
+    // get the product whose qty is to be updated
     setItems((prev) => {
       const newItems = prev
         .map((item) => {
@@ -71,17 +71,16 @@ export const CartContextProvider = ({ children }: PropsWithChildren) => {
   // Clear cart
   const clearCart = () => setItems([]);
 
-  const totalAmount = items.reduce(
-    (total, current) => (total += current.product.price * current.quantity),
-    0
-  );
+  const totalAmount = items.reduce((total, current) => {
+    return (total += current.product.price * current.quantity);
+  }, 0);
   return (
     <CartContext.Provider
       value={{
-        items,
         addItemToCart,
         updateQuantity,
         clearCart,
+        items,
         totalAmount,
       }}>
       {children}

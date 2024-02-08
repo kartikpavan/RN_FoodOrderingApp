@@ -8,6 +8,7 @@ export default function MenuStack() {
   const colorScheme = useColorScheme();
 
   return (
+    // On All screens this cart icon will be displayed at the top right
     <Stack
       screenOptions={{
         headerRight: () => (
@@ -25,6 +26,7 @@ export default function MenuStack() {
           </Link>
         ),
       }}>
+      {/* menu/root screen settings */}
       <Stack.Screen name="index" options={{ title: "Menu" }} />
     </Stack>
   );
