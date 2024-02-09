@@ -10,6 +10,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { useColorScheme } from "../components/useColorScheme.web";
 import { CartContextProvider } from "../context/CartProvider";
+import { AuthProvider } from "../context/AuthProvider";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -53,15 +54,17 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <CartContextProvider>
-        <Stack>
-          {/* Extra Info about all the screens will be added here */}
-          <Stack.Screen name="(admin)" options={{ headerShown: false }} />
-          <Stack.Screen name="(user)" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="cart" options={{ presentation: "card" }} />
-        </Stack>
-      </CartContextProvider>
+      <AuthProvider>
+        <CartContextProvider>
+          <Stack>
+            {/* Extra Info about all the screens will be added here */}
+            <Stack.Screen name="(admin)" options={{ headerShown: false }} />
+            <Stack.Screen name="(user)" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="cart" options={{ presentation: "card" }} />
+          </Stack>
+        </CartContextProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

@@ -1,11 +1,23 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Link } from "expo-router";
+import { Link, Redirect } from "expo-router";
 import Button from "../components/Button";
 import Colors from "../constants/Colors";
+import { useAuthContext } from "../context/AuthProvider";
+import { supabase } from "../lib/supabase";
 
 //? This is the main entry point of the app.
 const RootIndex = () => {
+  const { session, loading } = useAuthContext();
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+  // no session means , user is not signed-in
+  if (!session) {
+    return <Redirect href={"/(auth)/sign-in"} />;
+  }
+
   return (
     <View style={{ flex: 1, justifyContent: "center", padding: 10 }}>
       <Link href={"/(user)"} asChild>
@@ -17,6 +29,11 @@ const RootIndex = () => {
       <Link href={"/(auth)/sign-in"} asChild>
         <Button text="Sign In" color="green" />
       </Link>
+      <Button
+        text="Sign Out"
+        color="red"
+        onPress={() => supabase.auth.signOut()}
+      />
     </View>
   );
 };
