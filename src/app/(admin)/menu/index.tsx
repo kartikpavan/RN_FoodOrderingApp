@@ -8,7 +8,6 @@ import {
   Pressable,
   Text,
   View,
-  useColorScheme,
 } from "react-native";
 
 //? Admin Menu Screen
