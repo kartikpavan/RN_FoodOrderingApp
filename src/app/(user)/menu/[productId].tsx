@@ -1,18 +1,29 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import products from "@/assets/data/products";
 import { sizes } from "@/src/constants/Sizes";
 import { PizzaSize } from "@/src/types";
 import Button from "@/src/components/Button";
 import { useCartContext } from "@/src/context/CartProvider";
+import { useProduct } from "@/src/api/products";
+import { defaultPizzaImage } from "@/src/components/CartListItem";
 
 const SingleProductScreen = () => {
+  const router = useRouter();
   const { addItemToCart } = useCartContext();
   const { productId } = useLocalSearchParams();
-  const router = useRouter();
+  const parseProductId = parseFloat(
+    typeof productId === "string" ? productId : productId[0]
+  );
+  const { data: product, isLoading, error } = useProduct(parseProductId);
   const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
-  const product = products.find((item) => item.id.toString() === productId);
 
   // Add to Cart
   const addToCart = () => {
@@ -21,14 +32,16 @@ const SingleProductScreen = () => {
     router.push("/cart");
   };
 
-  if (!product) {
-    return <Text>Oops! No Product Found</Text>;
-  }
+  if (isLoading) return <ActivityIndicator />;
+  if (error) return <Text>Failed to fetch Products</Text>;
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: product.name }} />
-      <Image source={{ uri: product.image }} style={styles.image} />
+      <Stack.Screen options={{ title: product?.name }} />
+      <Image
+        source={{ uri: product?.image || defaultPizzaImage }}
+        style={styles.image}
+      />
       <Text style={styles.sizeTitle}>Select Size</Text>
       <View style={styles.sizesContainer}>
         {sizes.map((item) => {
@@ -55,7 +68,7 @@ const SingleProductScreen = () => {
           );
         })}
       </View>
-      <Text style={styles.price}>Price: ₹ {product.price}</Text>
+      <Text style={styles.price}>Price: ₹ {product?.price}</Text>
       <Button text="Add To Cart" color="tomato" onPress={addToCart} />
     </View>
   );

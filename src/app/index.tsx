@@ -1,6 +1,6 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Link, Redirect } from "expo-router";
+import { Link, Redirect, Stack } from "expo-router";
 import Button from "../components/Button";
 import Colors from "../constants/Colors";
 import { useAuthContext } from "../context/AuthProvider";
@@ -20,6 +20,7 @@ const RootIndex = () => {
 
   return (
     <View style={{ flex: 1, justifyContent: "center", padding: 10 }}>
+      <Stack.Screen options={{ title: "Home", headerTitleAlign: "center" }} />
       <Link href={"/(user)"} asChild>
         <Button text="User" color="tomato" />
       </Link>

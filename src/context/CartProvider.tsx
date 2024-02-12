@@ -32,6 +32,7 @@ export const CartContextProvider = ({ children }: PropsWithChildren) => {
     };
 
     setItems((prev) => {
+      // Check for the exsiting item
       const existingItemIndex = prev.findIndex(
         (item) => item.product_id === product.id && item.size === size
       );

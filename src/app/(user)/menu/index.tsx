@@ -1,18 +1,21 @@
-import products from "@/assets/data/products";
+import { useProductList } from "@/src/api/products";
 import { ProductListItem } from "@/src/components/ProductListItem";
-import { FlatList, View } from "react-native";
+import { ActivityIndicator, FlatList, Text } from "react-native";
 
 export default function FoodMenu() {
+  const { data: products, isLoading, error } = useProductList();
+
+  if (isLoading) return <ActivityIndicator />;
+  if (error) return <Text>Failed to fetch Products</Text>;
+
   return (
-    <View>
-      <FlatList
-        data={products}
-        renderItem={(data) => <ProductListItem product={data.item} />}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={{ padding: 10, gap: 10 }}
-        columnWrapperStyle={{ gap: 10 }}
-        numColumns={2}
-      />
-    </View>
+    <FlatList
+      data={products}
+      renderItem={(data) => <ProductListItem product={data.item} />}
+      keyExtractor={(item) => item.id.toString()}
+      contentContainerStyle={{ padding: 10, gap: 10 }}
+      columnWrapperStyle={{ gap: 10 }}
+      numColumns={2}
+    />
   );
 }

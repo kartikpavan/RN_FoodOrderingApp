@@ -1,7 +1,6 @@
 import React from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Redirect, Tabs } from "expo-router";
-import { useColorScheme } from "@/src/components/useColorScheme.web";
 import { useClientOnlyValue } from "@/src/components/useClientOnlyValue.web";
 import { useAuthContext } from "@/src/context/AuthProvider";
 
