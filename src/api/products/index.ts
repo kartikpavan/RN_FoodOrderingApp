@@ -35,7 +35,7 @@ export const useCreateProduct = () => {
   const queryClient = useQueryClient();
   return useMutation({
     async mutationFn(data: any) {
-      const { data: productData, error } = await supabase
+      const { error } = await supabase
         .from("products")
         .insert({
           name: data.name,
@@ -44,7 +44,6 @@ export const useCreateProduct = () => {
         })
         .single();
       if (error) throw new Error(error.message);
-      return productData;
     },
     async onSuccess() {
       await queryClient.invalidateQueries({ queryKey: ["product"] });
@@ -62,12 +61,29 @@ export const useUpdateProduct = () => {
         .update(update)
         .eq("id", id)
         .select();
-      if (error) throw error;
+      if (error) throw new Error(error.message);
       return data;
     },
     async onSuccess(_, { id }) {
       await queryClient.invalidateQueries({ queryKey: ["product"] });
       await queryClient.invalidateQueries({ queryKey: ["product", id] });
+    },
+    onError(error) {
+      console.log(error);
+    },
+  });
+};
+
+// ADMIN: Delete Product
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    async mutationFn(id: number) {
+      const { error } = await supabase.from("products").delete().eq("id", id);
+      if (error) throw new Error(error.message);
+    },
+    async onSuccess() {
+      await queryClient.invalidateQueries({ queryKey: ["product"] });
     },
     onError(error) {
       console.log(error);

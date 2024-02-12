@@ -1,4 +1,12 @@
-import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
@@ -7,6 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import {
   useCreateProduct,
+  useDeleteProduct,
   useProduct,
   useUpdateProduct,
 } from "@/src/api/products";
@@ -20,6 +29,7 @@ const CreateProduct = () => {
   const [price, setPrice] = useState<string>("");
   const [image, setImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   // For update we need Id
   const { id } = useLocalSearchParams();
@@ -29,6 +39,7 @@ const CreateProduct = () => {
   const { mutate: insertProduct } = useCreateProduct();
   const { mutate: updateProduct } = useUpdateProduct();
   const { data: databaseProduct } = useProduct(parseProductId);
+  const { mutate: deleteProduct } = useDeleteProduct();
 
   // Feeding the text input with original values from the DB
   useEffect(() => {
@@ -45,7 +56,7 @@ const CreateProduct = () => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.7,
     });
     if (!result.canceled) setImage(result.assets[0].uri);
   };
@@ -94,16 +105,16 @@ const CreateProduct = () => {
   };
 
   const onDelete = () => {
-    // TODO: Delete Product from DB
-    console.warn("Delete start");
+    deleteProduct(parseProductId, {
+      onSuccess() {
+        router.replace("/(admin)");
+      },
+    });
   };
 
   const confirmDelete = () => {
     Alert.alert("Confirm", "Are you sure you want to delete this product ?", [
-      {
-        text: "Cancel",
-        style: "default",
-      },
+      { text: "Cancel", style: "default" },
       { text: "OK", style: "destructive", onPress: onDelete },
     ]);
   };
