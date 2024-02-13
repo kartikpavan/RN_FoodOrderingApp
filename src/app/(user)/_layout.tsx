@@ -33,9 +33,7 @@ export default function TabLayout() {
         options={{
           title: "Menu",
           headerShown: false, // we are rendering multiple stacks on top of each other
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="pizza-slice" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="pizza-slice" color={color} />,
         }}
       />
       {/* Orders Tab */}
@@ -45,6 +43,15 @@ export default function TabLayout() {
           title: "Orders",
           headerShown: false, // we are rendering multiple stacks on top of each other
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+        }}
+      />
+      {/* Settings Tab */}
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          headerShown: false, // we are rendering multiple stacks on top of each other
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
     </Tabs>

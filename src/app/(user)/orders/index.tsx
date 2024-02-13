@@ -1,10 +1,17 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import orders from "@/assets/data/orders";
 import OrderListItem from "@/src/components/OrderListItem";
 import { Stack } from "expo-router";
+import { useMyOrderList } from "@/src/api/orders";
+import Loader from "@/src/components/Loader";
 
 const OrdersScreen = () => {
+  const { data: orders, isLoading, error } = useMyOrderList();
+  console.log(orders);
+
+  if (isLoading) return <Loader />;
+  if (error) return <Text>Failed to fetch Orders</Text>;
+
   return (
     <View>
       <Stack.Screen options={{ title: "Orders" }} />
