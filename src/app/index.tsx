@@ -8,7 +8,7 @@ import { supabase } from "../lib/supabase";
 
 //? This is the main entry point of the app.
 const RootIndex = () => {
-  const { session, loading } = useAuthContext();
+  const { session, loading, isAdmin } = useAuthContext();
 
   if (loading) {
     return <ActivityIndicator />;
@@ -16,6 +16,10 @@ const RootIndex = () => {
   // no session means , user is not signed-in
   if (!session) {
     return <Redirect href={"/(auth)/sign-in"} />;
+  }
+
+  if (!isAdmin) {
+    return <Redirect href={"/(user)"} />;
   }
 
   return (
@@ -27,9 +31,9 @@ const RootIndex = () => {
       <Link href={"/(admin)"} asChild>
         <Button text="Admin" color={Colors.light.tint} />
       </Link>
-      <Link href={"/(auth)/sign-in"} asChild>
+      {/* <Link href={"/(auth)/sign-in"} asChild>
         <Button text="Sign In" color="green" />
-      </Link>
+      </Link> */}
       <Button
         text="Sign Out"
         color="red"

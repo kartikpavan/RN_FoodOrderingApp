@@ -121,6 +121,7 @@ const CreateProduct = () => {
     ]);
   };
 
+  // Loading state
   if (deleteLoading || insertLoading || updateLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
