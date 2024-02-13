@@ -1,20 +1,15 @@
 import { useProductList } from "@/src/api/products";
+import Loader from "@/src/components/Loader";
 import { ProductListItem } from "@/src/components/ProductListItem";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link, Stack } from "expo-router";
-import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 
 //? Admin Menu Screen
 export default function FoodMenu() {
   const { data: products, isLoading, error } = useProductList();
 
-  if (isLoading) return <ActivityIndicator />;
+  if (isLoading) return <Loader />;
   if (error) return <Text>Failed to fetch Products</Text>;
 
   return (

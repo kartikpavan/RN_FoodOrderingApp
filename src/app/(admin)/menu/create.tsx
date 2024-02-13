@@ -1,12 +1,4 @@
-import {
-  ActivityIndicator,
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
@@ -19,6 +11,7 @@ import {
   useProduct,
   useUpdateProduct,
 } from "@/src/api/products";
+import Loader from "@/src/components/Loader";
 
 export const defaultPizzaImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
@@ -35,13 +28,10 @@ const CreateProduct = () => {
   const isUpdating = Boolean(id);
   const parseProductId = parseFloat(typeof id === "string" ? id : id?.[0]);
 
-  const { mutate: insertProduct, isPending: insertLoading } =
-    useCreateProduct();
-  const { mutate: updateProduct, isPending: updateLoading } =
-    useUpdateProduct();
+  const { mutate: insertProduct, isPending: insertLoading } = useCreateProduct();
+  const { mutate: updateProduct, isPending: updateLoading } = useUpdateProduct();
   const { data: databaseProduct } = useProduct(parseProductId);
-  const { mutate: deleteProduct, isPending: deleteLoading } =
-    useDeleteProduct();
+  const { mutate: deleteProduct, isPending: deleteLoading } = useDeleteProduct();
 
   // Feeding the text input with original values from the DB
   useEffect(() => {
@@ -122,25 +112,12 @@ const CreateProduct = () => {
   };
 
   // Loading state
-  if (deleteLoading || insertLoading || updateLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
-        <Text style={{ fontSize: 16, fontWeight: "bold" }}>Please Wait...</Text>
-      </View>
-    );
-  }
+  if (deleteLoading || insertLoading || updateLoading) return <Loader />;
 
   return (
     <View style={styles.container}>
-      <Stack.Screen
-        options={{ title: isUpdating ? "Update Product" : "Create Product" }}
-      />
-      <Image
-        source={{ uri: image || defaultPizzaImage }}
-        alt="Pizza Image"
-        style={styles.image}
-      />
+      <Stack.Screen options={{ title: isUpdating ? "Update Product" : "Create Product" }} />
+      <Image source={{ uri: image || defaultPizzaImage }} alt="Pizza Image" style={styles.image} />
       <Text style={styles.imageSelectBtn} onPress={pickImage}>
         Select Image
       </Text>

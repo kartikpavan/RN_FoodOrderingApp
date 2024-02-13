@@ -1,11 +1,4 @@
-import {
-  ActivityIndicator,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { sizes } from "@/src/constants/Sizes";
@@ -14,14 +7,13 @@ import Button from "@/src/components/Button";
 import { useCartContext } from "@/src/context/CartProvider";
 import { useProduct } from "@/src/api/products";
 import { defaultPizzaImage } from "@/src/components/CartListItem";
+import Loader from "@/src/components/Loader";
 
 const SingleProductScreen = () => {
   const router = useRouter();
   const { addItemToCart } = useCartContext();
   const { productId } = useLocalSearchParams();
-  const parseProductId = parseFloat(
-    typeof productId === "string" ? productId : productId[0]
-  );
+  const parseProductId = parseFloat(typeof productId === "string" ? productId : productId[0]);
   const { data: product, isLoading, error } = useProduct(parseProductId);
   const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
 
@@ -32,16 +24,13 @@ const SingleProductScreen = () => {
     router.push("/cart");
   };
 
-  if (isLoading) return <ActivityIndicator />;
+  if (isLoading) return <Loader />;
   if (error) return <Text>Failed to fetch Products</Text>;
 
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: product?.name }} />
-      <Image
-        source={{ uri: product?.image || defaultPizzaImage }}
-        style={styles.image}
-      />
+      <Image source={{ uri: product?.image || defaultPizzaImage }} style={styles.image} />
       <Text style={styles.sizeTitle}>Select Size</Text>
       <View style={styles.sizesContainer}>
         {sizes.map((item) => {
@@ -57,11 +46,7 @@ const SingleProductScreen = () => {
                   opacity: isSelected ? 1 : 0.8,
                 },
               ]}>
-              <Text
-                style={[
-                  styles.sizeText,
-                  { color: isSelected ? "#fff1e6" : "#232023" },
-                ]}>
+              <Text style={[styles.sizeText, { color: isSelected ? "#fff1e6" : "#232023" }]}>
                 {item}
               </Text>
             </Pressable>

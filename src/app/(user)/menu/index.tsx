@@ -1,11 +1,12 @@
 import { useProductList } from "@/src/api/products";
+import Loader from "@/src/components/Loader";
 import { ProductListItem } from "@/src/components/ProductListItem";
-import { ActivityIndicator, FlatList, Text } from "react-native";
+import { FlatList, Text } from "react-native";
 
 export default function FoodMenu() {
   const { data: products, isLoading, error } = useProductList();
 
-  if (isLoading) return <ActivityIndicator />;
+  if (isLoading) return <Loader />;
   if (error) return <Text>Failed to fetch Products</Text>;
 
   return (

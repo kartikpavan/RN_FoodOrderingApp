@@ -1,25 +1,17 @@
-import {
-  ActivityIndicator,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import { useProduct } from "@/src/api/products";
 import { defaultPizzaImage } from "@/src/components/CartListItem";
+import Loader from "@/src/components/Loader";
 
 const SingleProductScreen = () => {
   const { productId } = useLocalSearchParams();
-  const parseProductId = parseFloat(
-    typeof productId === "string" ? productId : productId[0]
-  );
+  const parseProductId = parseFloat(typeof productId === "string" ? productId : productId[0]);
   const { data: product, isLoading, error } = useProduct(parseProductId);
 
-  if (isLoading) return <ActivityIndicator />;
+  if (isLoading) return <Loader />;
   if (error) return <Text>Failed to fetch Products</Text>;
 
   return (
@@ -43,10 +35,7 @@ const SingleProductScreen = () => {
         }}
       />
       <Stack.Screen options={{ title: product?.name }} />
-      <Image
-        source={{ uri: product?.image || defaultPizzaImage }}
-        style={styles.image}
-      />
+      <Image source={{ uri: product?.image || defaultPizzaImage }} style={styles.image} />
       <Text style={styles.price}>Name: {product?.name}</Text>
       <Text style={styles.price}>Price: ₹ {product?.price}</Text>
     </View>
