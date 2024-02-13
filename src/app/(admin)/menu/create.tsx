@@ -29,17 +29,19 @@ const CreateProduct = () => {
   const [price, setPrice] = useState<string>("");
   const [image, setImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>("");
-  const [loading, setLoading] = useState<boolean>(false);
 
   // For update we need Id
   const { id } = useLocalSearchParams();
   const isUpdating = Boolean(id);
   const parseProductId = parseFloat(typeof id === "string" ? id : id?.[0]);
 
-  const { mutate: insertProduct } = useCreateProduct();
-  const { mutate: updateProduct } = useUpdateProduct();
+  const { mutate: insertProduct, isPending: insertLoading } =
+    useCreateProduct();
+  const { mutate: updateProduct, isPending: updateLoading } =
+    useUpdateProduct();
   const { data: databaseProduct } = useProduct(parseProductId);
-  const { mutate: deleteProduct } = useDeleteProduct();
+  const { mutate: deleteProduct, isPending: deleteLoading } =
+    useDeleteProduct();
 
   // Feeding the text input with original values from the DB
   useEffect(() => {
@@ -118,6 +120,15 @@ const CreateProduct = () => {
       { text: "OK", style: "destructive", onPress: onDelete },
     ]);
   };
+
+  if (deleteLoading || insertLoading || updateLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+        <Text style={{ fontSize: 16, fontWeight: "bold" }}>Please Wait...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
