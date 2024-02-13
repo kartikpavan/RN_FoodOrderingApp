@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 dayjs.extend(relativeTime);
 
 type OrderListItemProps = {
-  order: Order;
+  order: Order | undefined;
 };
 
 const OrderListItem = ({ order }: OrderListItemProps) => {
@@ -19,15 +19,15 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
     <Link href={`/${segments[0]}/orders/${order.id}`} asChild>
       <Pressable style={styles.container}>
         <View>
-          <Text style={styles.title}>Order #{order.id}</Text>
-          <Text style={styles.time}>{dayjs(order.created_at).fromNow()}</Text>
+          <Text style={styles.title}>Order #{order?.id}</Text>
+          <Text style={styles.time}>{dayjs(order?.created_at).fromNow()}</Text>
         </View>
         <Text
           style={[
             styles.status,
-            { color: order.status === "Delivered" ? "green" : "red" },
+            { color: order?.status === "Delivered" ? "green" : "red" },
           ]}>
-          {order.status}
+          {order?.status}
         </Text>
       </Pressable>
     </Link>

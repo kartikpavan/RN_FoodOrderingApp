@@ -1,7 +1,7 @@
 import { useAuthContext } from "@/src/context/AuthProvider";
 import { supabase } from "@/src/lib/supabase";
-import { Order } from "@/src/types";
-import { useQuery } from "@tanstack/react-query";
+import { Order, OrderItem } from "@/src/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Fetching all orders for admin
 export const useAdminOrderList = ({ archived = false }) => {
@@ -14,7 +14,10 @@ export const useAdminOrderList = ({ archived = false }) => {
   return useQuery<Order[]>({
     queryKey: ["order", { archived }],
     queryFn: async () => {
-      const { data, error } = await supabase.from("orders").select("*").in("status", statuses);
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*")
+        .in("status", statuses);
       if (error) throw new Error(error.message);
       return data;
     },
@@ -37,6 +40,52 @@ export const useMyOrderList = () => {
 
       if (error) throw new Error(error.message);
       return data;
+    },
+  });
+};
+
+// Fetching single order by ID
+export const useOrder = (id: number) => {
+  return useQuery<Order>({
+    queryKey: ["order", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*")
+        .eq("id", id)
+        .single();
+      if (error) throw new Error(error.message);
+      return data;
+    },
+  });
+};
+
+type CreateOrderType = {
+  id?: number;
+  created_at?: string;
+  status?: string;
+  total_amount: number;
+  user_id?: string | null;
+};
+
+// Creating Order by User
+export const useInsertOrder = () => {
+  const queryClient = useQueryClient();
+  const { session } = useAuthContext();
+  const userId = session?.user.id;
+
+  return useMutation({
+    async mutationFn(data: CreateOrderType) {
+      const { error, data: newOrder } = await supabase
+        .from("orders")
+        .insert({ ...data, user_id: userId })
+        .select()
+        .single();
+      if (error) throw new Error(error.message);
+      return newOrder;
+    },
+    async onSuccess() {
+      await queryClient.invalidateQueries({ queryKey: ["order"] });
     },
   });
 };

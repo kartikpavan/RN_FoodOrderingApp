@@ -4,27 +4,26 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import orders from "@/assets/data/orders";
 import OrderListItem from "@/src/components/OrderListItem";
 import OrderItemListItem from "@/src/components/OrderItemListItem";
-import { OrderStatus } from "@/src/types";
-import { status } from "@/src/constants/Status";
-
-const orderStatus = ["New", "Cooking", "Delivering", "Delivered"];
+import { useOrder } from "@/src/api/orders";
+import Loader from "@/src/components/Loader";
 
 const OrderDetailsScreen = () => {
   const { orderId } = useLocalSearchParams();
+  const parseOrderId = parseFloat(
+    typeof orderId === "string" ? orderId : orderId[0]
+  );
 
-  const order = orders.find((item) => item.id.toString() === orderId);
+  const { data: order, isLoading, error } = useOrder(parseOrderId);
 
-  if (!order) {
-    return <Text>Order Not Found</Text>;
-  }
-
+  if (isLoading) return <Loader />;
+  if (error) return <Text>Failed to fetch Products</Text>;
   return (
     <View style={{ padding: 10, gap: 20 }}>
       <Stack.Screen options={{ title: `Order #${orderId}` }} />
       <OrderListItem order={order} />
 
       <FlatList
-        data={order.order_items}
+        data={order?.order_items}
         renderItem={(data) => <OrderItemListItem item={data.item} />}
         contentContainerStyle={{ paddingVertical: 10, gap: 10 }}
       />

@@ -16,7 +16,7 @@ const RootIndex = () => {
   // no session means , user is not signed-in
   if (!session) return <Redirect href={"/(auth)/sign-in"} />;
 
-  // if (!isAdmin) return <Redirect href={"/(user)"} />;
+  if (!isAdmin) return <Redirect href={"/(user)"} />;
 
   return (
     <View style={{ flex: 1, justifyContent: "center", padding: 10 }}>
@@ -27,7 +27,11 @@ const RootIndex = () => {
       <Link href={"/(admin)"} asChild>
         <Button text="Admin" color={Colors.light.tint} />
       </Link>
-      <Button text="Sign Out" color="red" onPress={() => supabase.auth.signOut()} />
+      <Button
+        text="Sign Out"
+        color="red"
+        onPress={() => supabase.auth.signOut()}
+      />
     </View>
   );
 };

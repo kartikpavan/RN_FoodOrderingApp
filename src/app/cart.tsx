@@ -6,7 +6,7 @@ import CartListItem from "../components/CartListItem";
 import Button from "../components/Button";
 
 const CartScreen = () => {
-  const { items, totalAmount } = useCartContext();
+  const { items, totalAmount, checkout } = useCartContext();
   return (
     <View style={{ padding: 10, flex: 1 }}>
       {items.length === 0 ? (
@@ -46,7 +46,7 @@ const CartScreen = () => {
             </View>
           </View>
           <View style={{ marginTop: "auto" }}>
-            <Button text="Checkout" color="tomato" />
+            <Button text="Checkout" color="tomato" onPress={checkout} />
           </View>
         </View>
       )}

@@ -7,23 +7,27 @@ import OrderItemListItem from "@/src/components/OrderItemListItem";
 import { status } from "@/src/constants/Status";
 import Colors from "@/src/constants/Colors";
 import { OrderStatus } from "@/src/types";
+import { useOrder } from "@/src/api/orders";
+import Loader from "@/src/components/Loader";
 
 const OrderDetailsScreen = () => {
   const { orderId } = useLocalSearchParams();
+  const parseOrderId = parseFloat(
+    typeof orderId === "string" ? orderId : orderId[0]
+  );
   const [currentStatus, setCurrentStatus] = useState<OrderStatus | null>(null);
 
-  const order = orders.find((item) => item.id.toString() === orderId);
+  const { data: order, isLoading, error } = useOrder(parseOrderId);
 
-  if (!order) {
-    return <Text>Order Not Found</Text>;
-  }
+  if (isLoading) return <Loader />;
+  if (error) return <Text>Failed to fetch Products</Text>;
 
   return (
     <View style={{ padding: 10, gap: 20 }}>
       <Stack.Screen options={{ title: `Order #${orderId}` }} />
       <FlatList
         ListHeaderComponent={() => <OrderListItem order={order} />}
-        data={order.order_items}
+        data={order?.order_items}
         renderItem={(data) => <OrderItemListItem item={data.item} />}
         contentContainerStyle={{ paddingVertical: 10, gap: 10 }}
         ListFooterComponent={() => (
