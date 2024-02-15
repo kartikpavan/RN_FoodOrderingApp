@@ -5,19 +5,14 @@ import { useClientOnlyValue } from "@/src/components/useClientOnlyValue.web";
 import { useAuthContext } from "@/src/context/AuthProvider";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome5>["name"];
-  color: string;
-}) {
+function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome5>["name"]; color: string }) {
   return <FontAwesome5 size={20} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
   const { session } = useAuthContext();
 
-  if (!session) {
-    return <Redirect href={"/"} />;
-  }
+  if (!session) return <Redirect href={"/"} />;
 
   return (
     <Tabs

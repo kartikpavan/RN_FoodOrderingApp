@@ -8,28 +8,25 @@ import { useOrder } from "@/src/api/orders";
 import Loader from "@/src/components/Loader";
 
 const OrderDetailsScreen = () => {
-  const { orderId } = useLocalSearchParams();
-  const parseOrderId = parseFloat(
-    typeof orderId === "string" ? orderId : orderId[0]
-  );
+    const { orderId } = useLocalSearchParams();
+    const parseOrderId = parseFloat(typeof orderId === "string" ? orderId : orderId[0]);
 
-  const { data: order, isLoading, error } = useOrder(parseOrderId);
+    const { data: order, isLoading, error } = useOrder(parseOrderId);
 
-  if (isLoading) return <Loader />;
-  if (error) return <Text>Failed to fetch Products</Text>;
-  return (
-    <View style={{ padding: 10, gap: 20 }}>
-      <Stack.Screen options={{ title: `Order #${orderId}` }} />
-      <OrderListItem order={order} />
+    if (isLoading) return <Loader />;
+    if (error) return <Text>Failed to fetch Products</Text>;
 
-      <FlatList
-        data={order?.order_items}
-        renderItem={(data) => <OrderItemListItem item={data.item} />}
-        contentContainerStyle={{ paddingVertical: 10, gap: 10 }}
-      />
-      {/* Status Selector */}
-    </View>
-  );
+    return (
+        <View style={{ padding: 10, gap: 20 }}>
+            <Stack.Screen options={{ title: `Order #${orderId}` }} />
+            <OrderListItem order={order} />
+            <FlatList
+                data={order?.order_items}
+                renderItem={(data) => <OrderItemListItem item={data.item} />}
+                contentContainerStyle={{ paddingVertical: 10, gap: 10 }}
+            />
+        </View>
+    );
 };
 
 export default OrderDetailsScreen;
