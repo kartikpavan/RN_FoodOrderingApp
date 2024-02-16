@@ -6,22 +6,22 @@ import { useMyOrderList } from "@/src/api/orders";
 import Loader from "@/src/components/Loader";
 
 const OrdersScreen = () => {
-  const { data: orders, isLoading, error } = useMyOrderList();
+    const { data: orders, isLoading, error } = useMyOrderList();
 
-  if (isLoading) return <Loader />;
-  if (error) return <Text>Failed to fetch Orders</Text>;
+    if (isLoading) return <Loader />;
+    if (error) return <Text>Failed to fetch Orders</Text>;
 
-  return (
-    <View>
-      <Stack.Screen options={{ title: "Orders" }} />
-      <FlatList
-        data={orders}
-        renderItem={({ item }) => <OrderListItem order={item} />}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={{ padding: 10, gap: 10 }}
-      />
-    </View>
-  );
+    return (
+        <View>
+            <Stack.Screen options={{ title: "Orders" }} />
+            <FlatList
+                data={orders}
+                renderItem={({ item }) => <OrderListItem order={item} />}
+                keyExtractor={(item) => item.id.toString()}
+                contentContainerStyle={{ padding: 10, gap: 10 }}
+            />
+        </View>
+    );
 };
 
 export default OrdersScreen;
